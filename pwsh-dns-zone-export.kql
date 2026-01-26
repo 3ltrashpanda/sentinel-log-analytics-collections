@@ -1,0 +1,4 @@
+DeviceEvents
+| where ActionType == "PowerShellCommand"
+| where AdditionalFields has_any ("Export-DnsServerZone", "Get-DnsServerZone")
+| where InitiatingProcessCommandLine != @"""MonitoringHost.exe"" -Embedding"

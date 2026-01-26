@@ -1,0 +1,4 @@
+DeviceProcessEvents
+| where FileName =~ "ssh.exe" or ProcessCommandLine contains "ssh "
+| where ProcessCommandLine contains "-R" or ProcessCommandLine contains "-L" or ProcessCommandLine contains "RemoteForward"
+| project Timestamp, DeviceName, InitiatingProcessAccountName, ProcessCommandLine, ReportId

@@ -1,0 +1,21 @@
+let UserPrincipalName_ = ""; //Add UserName
+let LookbackDays = 7d;
+// Personal email providers to flag
+let PersonalDomains = @"(gmail\.com|yahoo\.com|outlook\.com|hotmail\.com|icloud\.com)";
+EmailEvents
+| where SenderFromAddress == UserPrincipalName_
+| where TimeGenerated > ago(LookbackDays)
+| where EmailDirection == "Outbound"
+| extend RecipientDomain = tostring(extract(@"@(.+)", 1, RecipientEmailAddress))
+| where RecipientDomain matches regex PersonalDomains
+| project
+    TimeGenerated,
+    SenderFromAddress,
+    RecipientEmailAddress,
+    RecipientDomain,
+    Subject,
+    AttachmentCount,
+    EmailSize,
+    DeliveryAction,
+    DeliveryLocation
+| order by TimeGenerated

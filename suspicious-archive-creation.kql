@@ -1,0 +1,10 @@
+let DeviceName_   = "Device_Name";// Add your device name
+let LookbackDays  = 7d;
+DeviceFileEvents
+| where Timestamp > ago(LookbackDays)
+| where DeviceName =~ DeviceName_ // case-insensitive match on device name (just in case)
+| where FileName matches regex @"\.(zip|rar|7z|tar\.gz)$"
+| where ActionType in ("FileCreated", "FileModified")
+| project Timestamp, DeviceName, FileName, FolderPath, ActionType,
+          InitiatingProcessFileName, InitiatingProcessAccountDomain, InitiatingProcessAccountName
+| order by Timestamp desc

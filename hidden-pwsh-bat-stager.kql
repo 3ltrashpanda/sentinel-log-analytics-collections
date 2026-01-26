@@ -1,0 +1,6 @@
+DeviceProcessEvents
+| where FileName =~ "powershell.exe"
+| where ProcessCommandLine has_any ("-WindowStyle Hidden", "hidden")
+| where ProcessCommandLine has_any ("DownloadFile", "System.Net.WebClient", "[Net.ServicePointManager]", "Tls12")
+| where ProcessCommandLine has_any (@'\AppData\Local\Temp', ".bat")
+| project Timestamp, DeviceName, InitiatingProcessFileName, FileName, ProcessCommandLine, InitiatingProcessCommandLine, AccountName, SHA256
